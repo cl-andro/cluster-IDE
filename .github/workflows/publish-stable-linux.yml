@@ -131,23 +131,23 @@ jobs:
         - slug: X64
           vscode_arch: x64
           npm_arch: x64
-          image: ghcr.io/cl-andro/clusteride-build-agent:focal-x64
+          image: ghcr.io/vscodium/vscodium-build-agent:focal-x64
         - slug: ARM64
           vscode_arch: arm64
           npm_arch: arm64
-          image: ghcr.io/cl-andro/clusteride-build-agent:focal-arm64
+          image: ghcr.io/vscodium/vscodium-build-agent:focal-arm64
         - slug: RISCV64
           vscode_arch: riscv64
           npm_arch: riscv64
-          image: ghcr.io/cl-andro/clusteride-build-agent:focal-riscv64
+          image: ghcr.io/vscodium/vscodium-build-agent:focal-riscv64
         - slug: LOONG64
           vscode_arch: loong64
           npm_arch: loong64
-          image: ghcr.io/cl-andro/clusteride-build-agent:crimson-loong64
+          image: ghcr.io/vscodium/vscodium-build-agent:crimson-loong64
         - slug: PPC64
           vscode_arch: ppc64le
           npm_arch: ppc64
-          image: ghcr.io/cl-andro/clusteride-build-agent:focal-ppc64le
+          image: ghcr.io/vscodium/vscodium-build-agent:focal-ppc64le
     container:
       image: ${{ matrix.image }}
     env:

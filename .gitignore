@@ -18,6 +18,7 @@ build/linux/appimage/vscode*
 build/windows/msi/obj*
 *.orig
 *.patch
+!patches/*.patch
 node_modules
 npm-debug.log
 out*/

@@ -1,0 +1,28 @@
+name: Release - All Platforms
+
+on:
+  workflow_dispatch:
+    inputs:
+      quality:
+        type: choice
+        description: Release quality
+        options:
+          - stable
+          - insider
+        default: stable
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Trigger ${{ github.event.inputs.quality }} release on all platforms
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for platform in linux macos windows; do
+            workflow="publish-${{ github.event.inputs.quality }}-${platform}.yml"
+            echo "Triggering $workflow..."
+            gh workflow run "$workflow" --ref master
+          done
