@@ -2,6 +2,7 @@ vscode/**
 !vscode/extensions/
 !vscode/extensions/cluster/
 !vscode/extensions/cluster/**
+vscode-*
 VS*/*
 VSCode*
 clusterIDE*
