@@ -1,0 +1,5 @@
+package: "@daiyam/default"
+repository: https://github.com/cl-andro/cluster-IDE
+resources:
+  - label
+keep: true

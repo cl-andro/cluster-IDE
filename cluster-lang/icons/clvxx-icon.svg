@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="clvxx-violet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#B06AB3" />
+      <stop offset="100%" stop-color="#4568DC" />
+    </linearGradient>
+  </defs>
+
+  <path d="M 104,64 L 64,64 L 64,104" fill="none" stroke="url(#clvxx-violet)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <path d="M 152,64 L 192,64 L 192,104" fill="none" stroke="url(#clvxx-violet)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <path d="M 104,192 L 64,192 L 64,152" fill="none" stroke="url(#clvxx-violet)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <path d="M 152,192 L 192,192 L 192,152" fill="none" stroke="url(#clvxx-violet)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M 128,110 L 128,146 M 110,128 L 146,128" fill="none" stroke="url(#clvxx-violet)" stroke-width="32" stroke-linecap="round"/>
+</svg>

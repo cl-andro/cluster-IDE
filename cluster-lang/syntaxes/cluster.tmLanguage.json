@@ -1,0 +1,52 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "Cluster",
+    "patterns": [
+        { "include": "#comments" },
+        { "include": "#keywords" },
+        { "include": "#types" },
+        { "include": "#builtins" },
+        { "include": "#strings" },
+        { "include": "#numbers" }
+    ],
+    "repository": {
+        "comments": {
+            "patterns": [{
+                "name": "comment.line.double-slash.cluster",
+                "match": "//.*$"
+            }]
+        },
+        "keywords": {
+            "patterns": [{
+                "name": "keyword.control.cluster",
+                "match": "\\b(function|end|if|elif|else|while|for|in|return|put|true|false)\\b"
+            }]
+        },
+        "types": {
+            "patterns": [{
+                "name": "entity.name.type.cluster",
+                "match": "\\b(number|text|list|dict)\\b"
+            }]
+        },
+        "builtins": {
+            "patterns": [{
+                "name": "support.function.cluster",
+                "match": "\\b(math|http|json|db|env)\\b"
+            }]
+        },
+        "strings": {
+            "name": "string.quoted.double.cluster",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": [{
+                "name": "constant.character.escape.cluster",
+                "match": "\\\\."
+            }]
+        },
+        "numbers": {
+            "name": "constant.numeric.cluster",
+            "match": "\\b\\d+\\b"
+        }
+    },
+    "scopeName": "source.cluster"
+}
