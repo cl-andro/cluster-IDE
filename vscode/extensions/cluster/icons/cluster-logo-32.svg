@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="32" height="32">
+  <defs>
+    <linearGradient id="cl-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00D2FF" />
+      <stop offset="100%" stop-color="#3A7BD5" />
+    </linearGradient>
+
+    <mask id="cl-cutout-hex">
+      <polygon points="128,38 206,83 206,173 128,218 50,173 50,83" 
+               fill="white" stroke="white" stroke-width="24" stroke-linejoin="round" />
+      
+      <g stroke="black" stroke-width="32" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 105,88 A 38,38 0 1,0 105,168" />
+        
+        <path d="M 151,80 L 151,168 L 187,168" />
+      </g>
+    </mask>
+  </defs>
+
+  <rect width="256" height="256" fill="url(#cl-gradient)" mask="url(#cl-cutout-hex)" />
+</svg>

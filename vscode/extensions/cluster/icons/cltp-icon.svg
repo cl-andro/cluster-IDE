@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="cltp-pink" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F27121" />
+      <stop offset="100%" stop-color="#E94057" />
+    </linearGradient>
+  </defs>
+
+  <rect x="48" y="48" width="160" height="160" rx="24" 
+        fill="none" stroke="url(#cltp-pink)" stroke-width="32" />
+        
+  <path d="M 48,110 L 208,110" 
+        fill="none" stroke="url(#cltp-pink)" stroke-width="32" stroke-linecap="round"/>
+        
+  <path d="M 110,110 L 110,208" 
+        fill="none" stroke="url(#cltp-pink)" stroke-width="32" stroke-linecap="round"/>
+</svg>

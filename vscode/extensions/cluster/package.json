@@ -1,0 +1,138 @@
+{
+  "name": "cluster-lang",
+  "displayName": "Cluster Language Support",
+  "description": "Official syntax highlighting for the Cluster programming language",
+  "version": "1.0.0",
+  "publisher": "ClusterFamily",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": ["Programming Languages"],
+  "icon": "icons/cluster-logo.png",
+  "contributes": {
+    "languages": [
+      {
+        "id": "cluster",
+        "aliases": ["Cluster", "cluster"],
+        "extensions": [".cl", ".zk", ".clcfg", ".clq", ".clp"],
+        "icon": {
+          "light": "icons/cluster-logo-32.png",
+          "dark": "icons/cluster-logo-32.png"
+        },
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "cluster-ui",
+        "aliases": ["Cluster UI", "cluster-ui"],
+        "extensions": [".clx"],
+        "icon": {
+          "light": "icons/clx-icon-32.png",
+          "dark": "icons/clx-icon-32.png"
+        },
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "cluster-template",
+        "aliases": ["Cluster Template", "cluster-template"],
+        "extensions": [".cltp"],
+        "icon": {
+          "light": "icons/cltp-icon-32.png",
+          "dark": "icons/cltp-icon-32.png"
+        },
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "cluster-vector",
+        "aliases": ["Cluster Vector", "cluster-vector"],
+        "extensions": [".clv"],
+        "icon": {
+          "light": "icons/clv-icon-32.png",
+          "dark": "icons/clv-icon-32.png"
+        },
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "cluster-vector-db",
+        "aliases": ["Cluster Vector DB", "cluster-vector-db"],
+        "extensions": [".clvx"],
+        "icon": {
+          "light": "icons/clvx-icon-32.png",
+          "dark": "icons/clvx-icon-32.png"
+        },
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "cluster-vector-comp",
+        "aliases": ["Cluster Vector Component", "cluster-vector-comp"],
+        "extensions": [".clvxx"],
+        "icon": {
+          "light": "icons/clvxx-icon-32.png",
+          "dark": "icons/clvxx-icon-32.png"
+        },
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "cluster-table",
+        "aliases": ["Cluster Table", "cluster-table"],
+        "extensions": [".clt"],
+        "icon": {
+          "light": "icons/clt-icon-32.png",
+          "dark": "icons/clt-icon-32.png"
+        },
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "cluster-data",
+        "aliases": ["Cluster Data", "cluster-data"],
+        "extensions": [".cld"],
+        "icon": {
+          "light": "icons/cld-icon-32.png",
+          "dark": "icons/cld-icon-32.png"
+        },
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "cluster",
+        "scopeName": "source.cluster",
+        "path": "./syntaxes/cluster.tmLanguage.json"
+      },
+      {
+        "language": "cluster-ui",
+        "scopeName": "source.cluster",
+        "path": "./syntaxes/cluster.tmLanguage.json"
+      },
+      {
+        "language": "cluster-template",
+        "scopeName": "source.cluster",
+        "path": "./syntaxes/cluster.tmLanguage.json"
+      },
+      {
+        "language": "cluster-vector",
+        "scopeName": "source.cluster",
+        "path": "./syntaxes/cluster.tmLanguage.json"
+      },
+      {
+        "language": "cluster-vector-db",
+        "scopeName": "source.cluster",
+        "path": "./syntaxes/cluster.tmLanguage.json"
+      },
+      {
+        "language": "cluster-vector-comp",
+        "scopeName": "source.cluster",
+        "path": "./syntaxes/cluster.tmLanguage.json"
+      },
+      {
+        "language": "cluster-table",
+        "scopeName": "source.cluster",
+        "path": "./syntaxes/cluster.tmLanguage.json"
+      },
+      {
+        "language": "cluster-data",
+        "scopeName": "source.cluster",
+        "path": "./syntaxes/cluster.tmLanguage.json"
+      }
+    ]
+  }
+}

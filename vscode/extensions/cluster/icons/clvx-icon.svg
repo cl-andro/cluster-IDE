@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="clvx-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4E65FF" />
+      <stop offset="100%" stop-color="#92EFFD" />
+    </linearGradient>
+  </defs>
+
+  <path d="M 128,40 L 210,128 L 128,216 L 46,128 Z" 
+        fill="none" stroke="url(#clvx-blue)" stroke-width="32" stroke-linejoin="round"/>
+        
+  <path d="M 46,128 L 210,128" 
+        fill="none" stroke="url(#clvx-blue)" stroke-width="32" stroke-linecap="round"/>
+</svg>

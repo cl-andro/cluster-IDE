@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="clt-red" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF416C" />
+      <stop offset="100%" stop-color="#FF4B2B" />
+    </linearGradient>
+  </defs>
+
+  <path d="M 100,48 
+           L 75,48 
+           L 75,108 
+           L 50,128 
+           L 75,148 
+           L 75,208 
+           L 100,208" 
+        fill="none" 
+        stroke="url(#clt-red)" 
+        stroke-width="32" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  
+  <path d="M 156,48 
+           L 181,48 
+           L 181,108 
+           L 206,128 
+           L 181,148 
+           L 181,208 
+           L 156,208" 
+        fill="none" 
+        stroke="url(#clt-red)" 
+        stroke-width="32" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+</svg>
