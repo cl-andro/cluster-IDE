@@ -1,0 +1,47 @@
+name: Docker - Build Agent Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      push:
+        type: boolean
+        description: Push images to ghcr.io
+        default: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        tag:
+          - focal-x64
+          - focal-arm64
+        include:
+          - tag: focal-x64
+            platform: linux/amd64
+          - tag: focal-arm64
+            platform: linux/arm64/v8
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: docker/clusteride-build-agent
+          platforms: ${{ matrix.platform }}
+          tags: ghcr.io/cl-andro/clusteride-build-agent:${{ matrix.tag }}
+          push: ${{ github.event.inputs.push == 'true' }}
