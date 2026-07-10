@@ -10,7 +10,7 @@ env:
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
   APP_NAME: clusterIDE
   ASSETS_REPOSITORY: ${{ github.repository }}-insiders
-  BINARY_NAME: codium-insiders
+  BINARY_NAME: cluster-insiders
   DISABLE_UPDATE: yes
   GH_REPO_PATH: ${{ github.repository }}
   GITHUB_BRANCH: insider
@@ -444,7 +444,7 @@ jobs:
       contents: write
     env:
       RELEASE_VERSION: ${{ needs.check.outputs.RELEASE_VERSION }}
-      SNAP_NAME: codium-insiders
+      SNAP_NAME: cluster-insiders
     strategy:
       fail-fast: false
       matrix:

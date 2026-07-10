@@ -9,7 +9,7 @@ on:
 env:
   APP_NAME: clusterIDE
   ASSETS_REPOSITORY: ${{ github.repository }}-insiders
-  BINARY_NAME: codium-insiders
+  BINARY_NAME: cluster-insiders
   GH_REPO_PATH: ${{ github.repository }}
   GITHUB_BRANCH: insider
   ORG_NAME: ${{ github.repository_owner }}
