@@ -1,5 +1,8 @@
 FROM ubuntu:focal
 
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+
 RUN apt-get update && apt-get install -y \
     build-essential \
     git \
@@ -7,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     python3 \
     pkg-config \
+    tzdata \
     libx11-dev \
     libx11-xcb-dev \
     libxkbfile-dev \
@@ -18,6 +22,8 @@ RUN apt-get update && apt-get install -y \
     libcups2-dev \
     libstdc++6 \
     libatomic1 \
+    && ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
