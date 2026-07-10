@@ -22,6 +22,8 @@ jobs:
           - tag: focal-arm64
             platform: linux/arm64/v8
     runs-on: ubuntu-latest
+    env:
+      SHOULD_PUSH: ${{ github.event.inputs.push == 'true' && 'true' || 'false' }}
     steps:
       - uses: actions/checkout@v6
 
@@ -44,4 +46,4 @@ jobs:
           context: docker/clusteride-build-agent
           platforms: ${{ matrix.platform }}
           tags: ghcr.io/cl-andro/clusteride-build-agent:${{ matrix.tag }}
-          push: ${{ github.event.inputs.push == 'true' }}
+          push: ${{ env.SHOULD_PUSH == 'true' }}

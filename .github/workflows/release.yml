@@ -17,12 +17,13 @@ jobs:
     permissions:
       actions: write
     steps:
-      - name: Trigger ${{ github.event.inputs.quality }} release on all platforms
+      - name: Trigger release on all platforms
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          QUALITY: ${{ github.event.inputs.quality }}
         run: |
           for platform in linux macos windows; do
-            workflow="publish-${{ github.event.inputs.quality }}-${platform}.yml"
+            workflow="publish-${QUALITY}-${platform}.yml"
             echo "Triggering $workflow..."
             gh workflow run "$workflow" --ref master
           done
