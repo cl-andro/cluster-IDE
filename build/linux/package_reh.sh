@@ -43,6 +43,15 @@ elif [[ "${VSCODE_ARCH}" == "riscv64" ]]; then
 
   export VSCODE_SKIP_SETUPENV=1
   export VSCODE_NODEJS_SITE='https://unofficial-builds.nodejs.org'
+
+  # Remove @parcel/watcher from remote dependencies (fails on Node 24 for RISCV64)
+  node -e "
+  const p = require('./remote/package.json');
+  if (p.dependencies && p.dependencies['@parcel/watcher']) {
+    delete p.dependencies['@parcel/watcher'];
+    require('fs').writeFileSync('./remote/package.json', JSON.stringify(p, null, 2) + '\n');
+  }
+  "
 elif [[ "${VSCODE_ARCH}" == "loong64" ]]; then
   VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="vscodium/vscodium-linux-build-agent:beige-devtoolset-loong64"
 

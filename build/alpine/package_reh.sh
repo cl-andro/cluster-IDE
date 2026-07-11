@@ -32,6 +32,17 @@ if [[ -d "../patches/alpine/reh/" ]]; then
   done
 fi
 
+# Make native-keymap optional on Alpine (no prebuilt binary for musl + Node 24)
+node -e "
+const p = require('./package.json');
+if (p.dependencies && p.dependencies['native-keymap']) {
+  p.optionalDependencies = p.optionalDependencies || {};
+  p.optionalDependencies['native-keymap'] = p.dependencies['native-keymap'];
+  delete p.dependencies['native-keymap'];
+  require('fs').writeFileSync('./package.json', JSON.stringify(p, null, 2) + '\n');
+}
+"
+
 mv .npmrc .npmrc.bak
 cp ../npmrc .npmrc
 
@@ -43,7 +54,6 @@ for i in {1..5}; do # try 5 times
   fi
   echo "Npm install failed $i, trying again..."
 
-  rm -rf node_modules/native-keymap node_modules/@parcel/watcher node_modules/@vscode node_modules/node-pty
 done
 
 mv .npmrc.bak .npmrc
