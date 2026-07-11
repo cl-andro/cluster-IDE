@@ -32,6 +32,9 @@ if [[ -d "../patches/alpine/reh/" ]]; then
   done
 fi
 
+mv .npmrc .npmrc.bak
+cp ../npmrc .npmrc
+
 for i in {1..5}; do # try 5 times
   npm ci && break
   if [[ $i == 5 ]]; then
@@ -39,7 +42,11 @@ for i in {1..5}; do # try 5 times
     exit 1
   fi
   echo "Npm install failed $i, trying again..."
+
+  rm -rf node_modules/native-keymap node_modules/@parcel/watcher node_modules/@vscode node_modules/node-pty
 done
+
+mv .npmrc.bak .npmrc
 
 node build/azure-pipelines/distro/mixin-npm.ts
 
