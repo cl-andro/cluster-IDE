@@ -472,12 +472,12 @@ jobs:
       #     snap: ${{ steps.build.outputs.snap }}
       #     isClassic: 'true'
 
-      - uses: svenstaro/upload-release-action@29e53e917877a24fad85510ded594ab3c9ca12de # latest
-        with:
-          repo_name: ${{ env.ASSETS_REPOSITORY }}
-          repo_token: ${{ secrets.STRONGER_GITHUB_TOKEN }}
-          file: ${{ steps.build.outputs.snap }}
-          tag: ${{ env.RELEASE_VERSION }}
+      - name: Upload snap to release
+        env:
+          GH_TOKEN: ${{ secrets.STRONGER_GITHUB_TOKEN }}
+          SNAP_FILE: ${{ steps.build.outputs.snap }}
+          REL_TAG: ${{ env.RELEASE_VERSION }}
+        run: gh release upload "$REL_TAG" "$SNAP_FILE" --clobber
 
   deploy-repo-dev:
     needs:

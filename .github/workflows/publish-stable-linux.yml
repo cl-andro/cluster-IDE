@@ -477,12 +477,12 @@ jobs:
           isClassic: 'true'
         if: env.SHOULD_DEPLOY_TO_RELEASE == 'yes' || env.SHOULD_DEPLOY_TO_STORE == 'yes'
 
-      - uses: svenstaro/upload-release-action@29e53e917877a24fad85510ded594ab3c9ca12de # latest
-        with:
-          repo_name: ${{ env.ASSETS_REPOSITORY }}
-          repo_token: ${{ secrets.STRONGER_GITHUB_TOKEN }}
-          file: ${{ steps.build.outputs.snap }}
-          tag: ${{ env.RELEASE_VERSION }}
+      - name: Upload snap to release
+        env:
+          GH_TOKEN: ${{ secrets.STRONGER_GITHUB_TOKEN }}
+          SNAP_FILE: ${{ steps.build.outputs.snap }}
+          REL_TAG: ${{ env.RELEASE_VERSION }}
+        run: gh release upload "$REL_TAG" "$SNAP_FILE" --clobber
         if: env.SHOULD_DEPLOY_TO_RELEASE == 'yes'
 
       - uses: snapcore/action-publish@214b86e5ca036ead1668c79afb81e550e6c54d40
