@@ -1,5 +1,7 @@
 FROM ubuntu:24.04
 
+ARG TARGETARCH
+
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 
@@ -7,6 +9,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     git \
     curl \
+    wget \
+    jq \
     ca-certificates \
     python3 \
     pkg-config \
@@ -27,9 +31,14 @@ RUN apt-get update && apt-get install -y \
     && dpkg-reconfigure --frontend noninteractive tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-# Node.js from unofficial-builds (Nodesource only supports amd64/arm64)
-RUN curl -fsSL https://unofficial-builds.nodejs.org/download/release/v24.18.0/node-v24.18.0-linux-riscv64.tar.xz \
-    | tar -xJ -C /usr/local --strip-components=1 \
-    && npm install -g yarn
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+      curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
+      && apt-get install -y nodejs \
+      && rm -rf /var/lib/apt/lists/*; \
+    else \
+      curl -fsSL https://unofficial-builds.nodejs.org/download/release/v24.18.0/node-v24.18.0-linux-riscv64.tar.xz \
+      | tar -xJ -C /usr/local --strip-components=1 \
+      && npm install -g yarn; \
+    fi
 
 CMD ["/bin/bash"]

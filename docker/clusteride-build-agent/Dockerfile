@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     git \
     curl \
+    wget \
+    jq \
     ca-certificates \
     python3 \
     pkg-config \

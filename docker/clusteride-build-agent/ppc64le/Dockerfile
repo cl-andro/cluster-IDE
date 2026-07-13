@@ -1,5 +1,7 @@
 FROM ubuntu:focal
 
+ARG TARGETARCH
+
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 
@@ -7,6 +9,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     git \
     curl \
+    wget \
+    jq \
     ca-certificates \
     python3 \
     pkg-config \
@@ -27,9 +31,14 @@ RUN apt-get update && apt-get install -y \
     && dpkg-reconfigure --frontend noninteractive tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-# Node.js from official builds (ppc64le supported upstream)
-RUN curl -fsSL https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-ppc64le.tar.xz \
-    | tar -xJ -C /usr/local --strip-components=1 \
-    && npm install -g yarn
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+      curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+      && apt-get install -y nodejs \
+      && rm -rf /var/lib/apt/lists/*; \
+    else \
+      curl -fsSL https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-ppc64le.tar.xz \
+      | tar -xJ -C /usr/local --strip-components=1 \
+      && npm install -g yarn; \
+    fi
 
 CMD ["/bin/bash"]

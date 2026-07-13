@@ -22,16 +22,16 @@ jobs:
           - focal-riscv64
         include:
           - tag: focal-x64
-            platform: linux/amd64
+            platforms: linux/amd64
             dockerfile: Dockerfile
           - tag: focal-arm64
-            platform: linux/arm64/v8
+            platforms: linux/amd64,linux/arm64/v8
             dockerfile: Dockerfile
           - tag: focal-ppc64le
-            platform: linux/ppc64le
+            platforms: linux/amd64,linux/ppc64le
             dockerfile: ppc64le/Dockerfile
           - tag: focal-riscv64
-            platform: linux/riscv64
+            platforms: linux/amd64,linux/riscv64
             dockerfile: riscv64/Dockerfile
     runs-on: ubuntu-latest
     permissions:
@@ -62,6 +62,6 @@ jobs:
         with:
           context: docker/clusteride-build-agent
           file: docker/clusteride-build-agent/${{ matrix.dockerfile }}
-          platforms: ${{ matrix.platform }}
+          platforms: ${{ matrix.platforms }}
           tags: ghcr.io/cl-andro/clusteride-build-agent:${{ matrix.tag }}
           push: ${{ env.SHOULD_PUSH == 'true' }}
