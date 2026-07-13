@@ -36,4 +36,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
 
 RUN npm install -g yarn
 
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal \
+    && . $HOME/.cargo/env \
+    && rustup default stable
+ENV PATH="/root/.cargo/bin:${PATH}"
+
 CMD ["/bin/bash"]

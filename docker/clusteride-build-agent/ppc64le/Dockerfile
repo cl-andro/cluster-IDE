@@ -43,4 +43,9 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
       && npm install -g yarn; \
     fi
 
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal \
+    && . $HOME/.cargo/env \
+    && rustup default stable
+ENV PATH="/root/.cargo/bin:${PATH}"
+
 CMD ["/bin/bash"]
