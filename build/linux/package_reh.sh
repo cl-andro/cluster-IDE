@@ -55,21 +55,16 @@ elif [[ "${VSCODE_ARCH}" == "riscv64" ]]; then
   });
   fs.writeFileSync('./remote/package.json', JSON.stringify(p, null, 2) + '\n');
 
-  // Also remove from package-lock.json (npm ci uses the lockfile)
-  const nmPrefix = 'node_modules/';
-  ['remote/package-lock.json', 'package-lock.json'].forEach(lockPath => {
-    const lock = require('./' + lockPath);
-    const deps = lock.dependencies || {};
-    const pkgs = lock.packages || {};
-    ['@parcel/watcher', '@vscode/native-watchdog'].forEach(m => {
-      delete deps[m];
-      const nmPkg = nmPrefix + m;
-      Object.keys(pkgs).forEach(k => {
-        if (k === nmPkg || k.startsWith(nmPkg + '/')) delete pkgs[k];
-      });
+  // Also remove from remote/package-lock.json (npm ci uses the lockfile)
+  const lock = require('./remote/package-lock.json');
+  ['@parcel/watcher', '@vscode/native-watchdog'].forEach(m => {
+    delete (lock.dependencies || {})[m];
+    const nmPkg = 'node_modules/' + m;
+    Object.keys(lock.packages || {}).forEach(k => {
+      if (k === nmPkg || k.startsWith(nmPkg + '/')) delete lock.packages[k];
     });
-    fs.writeFileSync('./' + lockPath, JSON.stringify(lock, null, 2) + '\n');
   });
+  fs.writeFileSync('./remote/package-lock.json', JSON.stringify(lock, null, 2) + '\n');
   "
 elif [[ "${VSCODE_ARCH}" == "loong64" ]]; then
   VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="vscodium/vscodium-linux-build-agent:beige-devtoolset-loong64"

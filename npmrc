@@ -1,4 +1,4 @@
-build_from_source="true"
-build_from_source_native_keymap="no"
-legacy-peer-deps="true"
+build-from-source=true
+build-from-source-native-keymap=no
+legacy-peer-deps=true
 timeout=180000
