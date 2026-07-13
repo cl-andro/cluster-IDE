@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     jq \
     ca-certificates \
     python3 \
+    python-is-python3 \
     pkg-config \
     tzdata \
     libx11-dev \
