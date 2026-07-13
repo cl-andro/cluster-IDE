@@ -37,7 +37,7 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
       && apt-get install -y nodejs \
       && rm -rf /var/lib/apt/lists/*; \
     else \
-      curl -fsSL https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-ppc64le.tar.xz \
+      curl -fsSL https://nodejs.org/dist/v24.15.0/node-v24.15.0-linux-ppc64le.tar.xz \
       | tar -xJ -C /usr/local --strip-components=1 \
       && npm install -g yarn; \
     fi
