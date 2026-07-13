@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Node.js from unofficial-builds (Nodesource only supports amd64/arm64)
-RUN curl -fsSL https://unofficial-builds.nodejs.org/download/release/v20.18.0/node-v20.18.0-linux-riscv64.tar.xz \
+RUN curl -fsSL https://unofficial-builds.nodejs.org/download/release/v24.18.0/node-v24.18.0-linux-riscv64.tar.xz \
     | tar -xJ -C /usr/local --strip-components=1 \
     && npm install -g yarn
 

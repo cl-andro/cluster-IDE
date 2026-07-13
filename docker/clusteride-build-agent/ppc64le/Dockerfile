@@ -27,8 +27,8 @@ RUN apt-get update && apt-get install -y \
     && dpkg-reconfigure --frontend noninteractive tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-# Node.js from unofficial-builds (Nodesource only supports amd64/arm64)
-RUN curl -fsSL https://unofficial-builds.nodejs.org/download/release/v20.18.0/node-v20.18.0-linux-ppc64le.tar.xz \
+# Node.js from official builds (ppc64le supported upstream)
+RUN curl -fsSL https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-ppc64le.tar.xz \
     | tar -xJ -C /usr/local --strip-components=1 \
     && npm install -g yarn
 
