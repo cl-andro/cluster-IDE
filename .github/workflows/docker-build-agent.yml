@@ -18,11 +18,21 @@ jobs:
         tag:
           - focal-x64
           - focal-arm64
+          - focal-ppc64le
+          - focal-riscv64
         include:
           - tag: focal-x64
             platform: linux/amd64
+            dockerfile: Dockerfile
           - tag: focal-arm64
             platform: linux/arm64/v8
+            dockerfile: Dockerfile
+          - tag: focal-ppc64le
+            platform: linux/ppc64le
+            dockerfile: ppc64le/Dockerfile
+          - tag: focal-riscv64
+            platform: linux/riscv64
+            dockerfile: riscv64/Dockerfile
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -51,6 +61,7 @@ jobs:
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
         with:
           context: docker/clusteride-build-agent
+          file: docker/clusteride-build-agent/${{ matrix.dockerfile }}
           platforms: ${{ matrix.platform }}
           tags: ghcr.io/cl-andro/clusteride-build-agent:${{ matrix.tag }}
           push: ${{ env.SHOULD_PUSH == 'true' }}
