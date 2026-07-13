@@ -152,12 +152,6 @@ jobs:
           npm_arch: ppc64
           image: ghcr.io/cl-andro/clusteride-build-agent:focal-ppc64le
           platform: linux/ppc64le
-    container:
-      image: ${{ matrix.image }}
-      options: --platform=${{ matrix.platform }}
-      credentials:
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GHCR_PAT }}
     env:
       BUILD_SOURCEVERSION: ${{ needs.compile.outputs.BUILD_SOURCEVERSION }}
       DISABLED: ${{ vars[format('DISABLE_STABLE_LINUX_APP_{0}', matrix.slug)] }}
@@ -189,10 +183,6 @@ jobs:
         run: ./check_tags.sh
         if: env.DISABLED != 'yes' && env.SHOULD_BUILD == 'yes'
 
-      - name: Install dependencies
-        run: ./build/linux/deps.sh
-        if: env.DISABLED != 'yes' && env.SHOULD_BUILD == 'yes'
-
       - uses: actions-rust-lang/setup-rust-toolchain@46268bd060767258de96ed93c1251119784f2ab6 # v1.16.1
         if: env.DISABLED != 'yes' && env.SHOULD_BUILD == 'yes'
 
@@ -202,12 +192,22 @@ jobs:
           name: cluster-ide
         if: env.DISABLED != 'yes' && env.SHOULD_BUILD == 'yes'
 
-      - name: Build
+      - name: Build in Docker container
         id: build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          npm_config_arch: ${{ matrix.npm_arch }}
-        run: ./build/linux/package_bin.sh
+        run: |
+          docker pull --platform ${{ matrix.platform }} ${{ matrix.image }}
+          docker run --platform ${{ matrix.platform }} \
+            --rm \
+            -v /home/runner/work:/home/runner/work \
+            -w ${{ github.workspace }} \
+            -e GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
+            -e BUILD_SOURCEVERSION \
+            -e RELEASE_VERSION \
+            -e VSCODE_ARCH \
+            -e npm_config_arch=${{ matrix.npm_arch }} \
+            -e GITHUB_OUTPUT \
+            ${{ matrix.image }} \
+            bash -c "./build/linux/deps.sh && ./build/linux/package_bin.sh"
         if: env.DISABLED != 'yes' && env.SHOULD_BUILD == 'yes'
 
       - name: Prepare assets

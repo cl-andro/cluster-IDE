@@ -7,6 +7,7 @@ ENV TZ=Etc/UTC
 
 RUN apt-get update && apt-get install -y \
     build-essential \
+    sudo \
     git \
     curl \
     wget \
