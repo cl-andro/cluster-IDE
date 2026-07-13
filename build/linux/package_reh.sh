@@ -47,11 +47,29 @@ elif [[ "${VSCODE_ARCH}" == "riscv64" ]]; then
   # Remove native modules from remote dependencies (fails to compile on RISCV64 with Node 24)
   node -e "
   const fs = require('fs');
+
+  // Remove from package.json
   const p = require('./remote/package.json');
   ['@parcel/watcher', '@vscode/native-watchdog'].forEach(m => {
     if (p.dependencies && p.dependencies[m]) delete p.dependencies[m];
   });
   fs.writeFileSync('./remote/package.json', JSON.stringify(p, null, 2) + '\n');
+
+  // Also remove from package-lock.json (npm ci uses the lockfile)
+  const nmPrefix = 'node_modules/';
+  ['remote/package-lock.json', 'package-lock.json'].forEach(lockPath => {
+    const lock = require('./' + lockPath);
+    const deps = lock.dependencies || {};
+    const pkgs = lock.packages || {};
+    ['@parcel/watcher', '@vscode/native-watchdog'].forEach(m => {
+      delete deps[m];
+      const nmPkg = nmPrefix + m;
+      Object.keys(pkgs).forEach(k => {
+        if (k === nmPkg || k.startsWith(nmPkg + '/')) delete pkgs[k];
+      });
+    });
+    fs.writeFileSync('./' + lockPath, JSON.stringify(lock, null, 2) + '\n');
+  });
   "
 elif [[ "${VSCODE_ARCH}" == "loong64" ]]; then
   VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="vscodium/vscodium-linux-build-agent:beige-devtoolset-loong64"
