@@ -140,10 +140,10 @@ jobs:
           vscode_arch: riscv64
           npm_arch: riscv64
           image: ghcr.io/cl-andro/clusteride-build-agent:focal-riscv64
-        - slug: LOONG64
-          vscode_arch: loong64
-          npm_arch: loong64
-          image: ghcr.io/cl-andro/clusteride-build-agent:crimson-loong64
+        # - slug: LOONG64
+        #   vscode_arch: loong64
+        #   npm_arch: loong64
+        #   image: ghcr.io/cl-andro/clusteride-build-agent:crimson-loong64
         - slug: PPC64
           vscode_arch: ppc64le
           npm_arch: ppc64
@@ -253,9 +253,9 @@ jobs:
         - slug: RISCV64
           vscode_arch: riscv64
           npm_arch: riscv64
-        - slug: LOONG64
-          vscode_arch: loong64
-          npm_arch: loong64
+        # - slug: LOONG64
+        #   vscode_arch: loong64
+        #   npm_arch: loong64
         - slug: S390X
           vscode_arch: s390x
           npm_arch: s390x
