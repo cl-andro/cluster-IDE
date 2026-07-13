@@ -131,14 +131,17 @@ jobs:
           vscode_arch: x64
           npm_arch: x64
           image: ghcr.io/cl-andro/clusteride-build-agent:focal-x64
+          platform: linux/amd64
         - slug: ARM64
           vscode_arch: arm64
           npm_arch: arm64
           image: ghcr.io/cl-andro/clusteride-build-agent:focal-arm64
+          platform: linux/arm64/v8
         - slug: RISCV64
           vscode_arch: riscv64
           npm_arch: riscv64
           image: ghcr.io/cl-andro/clusteride-build-agent:focal-riscv64
+          platform: linux/riscv64
         # - slug: LOONG64
         #   vscode_arch: loong64
         #   npm_arch: loong64
@@ -147,8 +150,10 @@ jobs:
           vscode_arch: ppc64le
           npm_arch: ppc64
           image: ghcr.io/cl-andro/clusteride-build-agent:focal-ppc64le
+          platform: linux/ppc64le
     container:
       image: ${{ matrix.image }}
+      options: --platform=${{ matrix.platform }}
       credentials:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GHCR_PAT }}
