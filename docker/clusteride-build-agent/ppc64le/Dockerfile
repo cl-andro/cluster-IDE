@@ -22,14 +22,14 @@ RUN apt-get update && apt-get install -y \
     libcups2-dev \
     libstdc++6 \
     libatomic1 \
+    xz-utils \
     && ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN npm install -g yarn
+# Node.js from unofficial-builds (Nodesource only supports amd64/arm64)
+RUN curl -fsSL https://unofficial-builds.nodejs.org/download/release/v20.18.0/node-v20.18.0-linux-ppc64le.tar.xz \
+    | tar -xJ -C /usr/local --strip-components=1 \
+    && npm install -g yarn
 
 CMD ["/bin/bash"]
