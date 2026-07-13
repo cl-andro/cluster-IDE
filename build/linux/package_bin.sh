@@ -38,6 +38,13 @@ elif [[ "${VSCODE_ARCH}" == "riscv64" ]]; then
   export ELECTRON_SKIP_BINARY_DOWNLOAD=1
   export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
   export VSCODE_SKIP_SETUPENV=1
+  # tsgo (TypeScript type checker) fails on RISCV64 - use a no-op wrapper
+  mkdir -p node_modules/.bin
+  cat > node_modules/.bin/tsgo << 'EOF'
+#!/usr/bin/env bash
+exit 0
+EOF
+  chmod +x node_modules/.bin/tsgo
 elif [[ "${VSCODE_ARCH}" == "loong64" ]]; then
   export VSCODE_ELECTRON_REPOSITORY='darkyzhou/electron-loong64'
   export ELECTRON_SKIP_BINARY_DOWNLOAD=1
@@ -114,6 +121,19 @@ for i in {1..5}; do # try 5 times
   fi
   echo "Npm install failed $i, trying again..."
 done
+
+# Make native-keymap optional on non-x64 (native module fails to compile on arm64/ppc64le/riscv64)
+if [[ "${VSCODE_ARCH}" != "x64" ]]; then
+  node -e "
+  const p = require('./package.json');
+  if (p.dependencies && p.dependencies['native-keymap']) {
+    p.optionalDependencies = p.optionalDependencies || {};
+    p.optionalDependencies['native-keymap'] = p.dependencies['native-keymap'];
+    delete p.dependencies['native-keymap'];
+    require('fs').writeFileSync('./package.json', JSON.stringify(p, null, 2) + '\n');
+  }
+  "
+fi
 
 if [[ -z "${VSCODE_SKIP_SETUPENV}" ]]; then
   if [[ -n "${VSCODE_SKIP_SYSROOT}" ]]; then
