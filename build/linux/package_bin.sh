@@ -167,7 +167,19 @@ fi
 npm run copy-policy-dto --prefix build
 node build/lib/policies/policyGenerator.ts build/lib/policies/policyData.jsonc linux
 
-npm run gulp "vscode-linux-${VSCODE_ARCH}-min-packing"
+# Retry gulp task on failure (Electron download often fails in QEMU-emulated env)
+retries=3
+for i in $(seq 1 $retries); do
+  if npm run gulp "vscode-linux-${VSCODE_ARCH}-min-packing"; then
+    break
+  fi
+  if [[ $i == $retries ]]; then
+    echo "Gulp packing failed after $retries attempts" >&2
+    exit 1
+  fi
+  echo "Gulp packing failed (attempt $i/$retries), retrying in 30s..."
+  sleep 30
+done
 
 if [[ -f "../build/linux/${VSCODE_ARCH}/ripgrep.sh" ]]; then
   bash "../build/linux/${VSCODE_ARCH}/ripgrep.sh" "../VSCode-linux-${VSCODE_ARCH}/resources/app/node_modules"
