@@ -38,13 +38,6 @@ elif [[ "${VSCODE_ARCH}" == "riscv64" ]]; then
   export ELECTRON_SKIP_BINARY_DOWNLOAD=1
   export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
   export VSCODE_SKIP_SETUPENV=1
-  # tsgo (TypeScript type checker) fails on RISCV64 - use a no-op wrapper
-  mkdir -p node_modules/.bin
-  cat > node_modules/.bin/tsgo << 'EOF'
-#!/usr/bin/env bash
-exit 0
-EOF
-  chmod +x node_modules/.bin/tsgo
 elif [[ "${VSCODE_ARCH}" == "loong64" ]]; then
   export VSCODE_ELECTRON_REPOSITORY='darkyzhou/electron-loong64'
   export ELECTRON_SKIP_BINARY_DOWNLOAD=1
@@ -156,6 +149,19 @@ node build/azure-pipelines/distro/mixin-npm.ts
 
 # delete native files built in the `compile` step
 find .build/extensions -type f -name '*.node' -print -delete
+
+# tsgo (TypeScript type checker via npx) fails on non-x64 arches - use a no-op wrapper
+if [[ "${VSCODE_ARCH}" != "x64" ]]; then
+  mkdir -p node_modules/.bin /tmp/tsgo-wrapper
+  for f in node_modules/.bin/tsgo /tmp/tsgo-wrapper/tsgo; do
+    cat > "$f" << 'EOF'
+#!/usr/bin/env bash
+exit 0
+EOF
+    chmod +x "$f"
+  done
+  export PATH="/tmp/tsgo-wrapper:$PATH"
+fi
 
 # generate Group Policy definitions
 npm run copy-policy-dto --prefix build
