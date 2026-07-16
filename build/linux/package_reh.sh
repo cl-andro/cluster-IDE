@@ -59,6 +59,9 @@ elif [[ "${VSCODE_ARCH}" == "riscv64" ]]; then
   const lock = require('./remote/package-lock.json');
   ['@parcel/watcher', '@vscode/native-watchdog', '@vscode/spdlog', '@vscode/windows-registry', '@vscode/windows-process-tree', 'kerberos', 'node-pty'].forEach(m => {
     delete (lock.dependencies || {})[m];
+    if (lock.packages && lock.packages[''] && lock.packages[''].dependencies) {
+      delete lock.packages[''].dependencies[m];
+    }
     const nmPkg = 'node_modules/' + m;
     Object.keys(lock.packages || {}).forEach(k => {
       if (k === nmPkg || k.startsWith(nmPkg + '/')) delete lock.packages[k];
@@ -94,9 +97,11 @@ fi
 
 EXPECTED_GLIBC_VERSION="${EXPECTED_GLIBC_VERSION:=GLIBC_VERSION}"
 VSCODE_HOST_MOUNT="$( pwd )"
+export VSCODE_NPMRC_PATH="${VSCODE_HOST_MOUNT}/.npmrc"
 
 export VSCODE_HOST_MOUNT
 export VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME
+export VSCODE_NPMRC_PATH
 
 sed -i "/target/s/\"22.*\"/\"${NODE_VERSION}\"/" remote/.npmrc
 

@@ -169,6 +169,7 @@ jobs:
         run: |
           docker pull --platform ${{ matrix.platform }} ${{ matrix.image }}
           docker run --platform ${{ matrix.platform }} \
+            --network host \
             --rm \
             -v /home/runner/work:/home/runner/work \
             -w ${{ github.workspace }} \
