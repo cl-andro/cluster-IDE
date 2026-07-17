@@ -1,0 +1,11 @@
+diff --git a/build/npm/postinstall.ts b/build/npm/postinstall.ts
+index 0d00ac39..23e23c05 100644
+--- a/build/npm/postinstall.ts
++++ b/build/npm/postinstall.ts
+@@ -85,5 +85,5 @@ async function npmInstallAsync(dir: string, opts?: child_process.SpawnOptions):
+ 			'-v', `${process.env['VSCODE_NPMRC_PATH']}:/root/.npmrc`,
+ 			'-w', path.resolve('/root/vscode', dir),
+ 			process.env['VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME'],
+-			'sh', '-c', `\"chown -R root:root ${path.resolve('/root/vscode', dir)} && export PATH="/root/vscode/.build/nodejs-musl/usr/local/bin:$PATH" && npm i -g node-gyp-build && npm ci\"`
++			'sh', '-c', `\"chown -R root:root ${path.resolve('/root/vscode', dir)} && export PATH="/root/vscode/.build/nodejs-musl/usr/local/bin:$PATH" && npm i -g node-gyp-build && npm install --no-audit --no-fund\"`
+ 		], syncOpts);

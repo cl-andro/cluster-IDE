@@ -145,6 +145,9 @@ for i in {1..5}; do # try 5 times
   echo "Npm install failed $i, trying again..."
 done
 
+# Patch gulp-electron to bypass GitHub API and construct direct download URL (prevents QEMU network disconnections)
+node ../build/linux/patch_gulp_electron.js
+
 node build/azure-pipelines/distro/mixin-npm.ts
 
 # delete native files built in the `compile` step
