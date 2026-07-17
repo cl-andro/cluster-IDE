@@ -64,7 +64,11 @@ elif [[ "${VSCODE_ARCH}" == "riscv64" ]]; then
     }
     const nmPkg = 'node_modules/' + m;
     Object.keys(lock.packages || {}).forEach(k => {
-      if (k === nmPkg || k.startsWith(nmPkg + '/')) delete lock.packages[k];
+      if (k === nmPkg || k.startsWith(nmPkg + '/')) {
+        delete lock.packages[k];
+      } else if (lock.packages[k].dependencies && lock.packages[k].dependencies[m]) {
+        delete lock.packages[k].dependencies[m];
+      }
     });
   });
   fs.writeFileSync('./remote/package-lock.json', JSON.stringify(lock, null, 2) + '\n');
