@@ -50,14 +50,14 @@ elif [[ "${VSCODE_ARCH}" == "riscv64" ]]; then
 
   // Remove from package.json
   const p = require('./remote/package.json');
-  ['@parcel/watcher', '@vscode/native-watchdog', '@vscode/spdlog', '@vscode/windows-registry', '@vscode/windows-process-tree', 'kerberos', 'node-pty'].forEach(m => {
+  ['@parcel/watcher', '@vscode/native-watchdog', '@vscode/spdlog', '@vscode/windows-registry', '@vscode/windows-process-tree', 'kerberos', 'node-pty', '@vscode/sqlite3'].forEach(m => {
     if (p.dependencies && p.dependencies[m]) delete p.dependencies[m];
   });
   fs.writeFileSync('./remote/package.json', JSON.stringify(p, null, 2) + '\n');
 
   // Also remove from remote/package-lock.json (npm ci uses the lockfile)
   const lock = require('./remote/package-lock.json');
-  ['@parcel/watcher', '@vscode/native-watchdog', '@vscode/spdlog', '@vscode/windows-registry', '@vscode/windows-process-tree', 'kerberos', 'node-pty'].forEach(m => {
+  ['@parcel/watcher', '@vscode/native-watchdog', '@vscode/spdlog', '@vscode/windows-registry', '@vscode/windows-process-tree', 'kerberos', 'node-pty', '@vscode/sqlite3'].forEach(m => {
     delete (lock.dependencies || {})[m];
     if (lock.packages && lock.packages[''] && lock.packages[''].dependencies) {
       delete lock.packages[''].dependencies[m];
