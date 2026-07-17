@@ -64,7 +64,7 @@ elif [[ "${VSCODE_ARCH}" == "riscv64" ]]; then
     }
     const nmPkg = 'node_modules/' + m;
     Object.keys(lock.packages || {}).forEach(k => {
-      if (k === nmPkg || k.startsWith(nmPkg + '/')) {
+      if (k === nmPkg || k.startsWith(nmPkg + '/') || k.startsWith(nmPkg + '-')) {
         delete lock.packages[k];
       } else if (lock.packages[k].dependencies && lock.packages[k].dependencies[m]) {
         delete lock.packages[k].dependencies[m];
