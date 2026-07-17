@@ -72,10 +72,9 @@ else
   elif [[ "${VSCODE_ARCH}" == "ppc64le" ]]; then
     VSCODE_CLI_TARGET="powerpc64le-unknown-linux-gnu"
 
-    # Use system libs instead of @vscode/openssl-prebuilt
-    mkdir -p openssl/out/ppc64le-linux/
-    ln -sf /usr/lib/powerpc64le-linux-gnu openssl/out/ppc64le-linux/lib
-    ln -sf /usr/include openssl/out/ppc64le-linux/include
+    # Use pkg-config for system OpenSSL
+    unset OPENSSL_LIB_DIR
+    unset OPENSSL_INCLUDE_DIR
 
     if [[ "${CI_BUILD}" != "no" ]] && [[ "$(uname -m)" != "ppc64le" ]]; then
       export CARGO_TARGET_POWERPC64LE_UNKNOWN_LINUX_GNU_LINKER=powerpc64le-linux-gnu-gcc-10
