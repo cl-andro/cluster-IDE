@@ -76,6 +76,9 @@ else
     mkdir -p openssl/out/ppc64le-linux/lib
     mkdir -p openssl/out/ppc64le-linux/include
     cp -R /usr/include/openssl openssl/out/ppc64le-linux/include/
+    if [[ -d "/usr/include/powerpc64le-linux-gnu/openssl" ]]; then
+      cp -RL /usr/include/powerpc64le-linux-gnu/openssl/* openssl/out/ppc64le-linux/include/openssl/
+    fi
     ln -sf /usr/lib/powerpc64le-linux-gnu/libssl.so* openssl/out/ppc64le-linux/lib/
     ln -sf /usr/lib/powerpc64le-linux-gnu/libcrypto.so* openssl/out/ppc64le-linux/lib/
 
