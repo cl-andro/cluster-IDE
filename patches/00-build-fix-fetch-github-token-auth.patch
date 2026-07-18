@@ -1,0 +1,16 @@
+diff --git a/build/lib/fetch.ts b/build/lib/fetch.ts
+index e5a1532..0112444 100644
+--- a/build/lib/fetch.ts
++++ b/build/lib/fetch.ts
+@@ -111,3 +111,10 @@ const ghApiHeaders: Record<string, string> = {
+ if (process.env.GITHUB_TOKEN) {
+-	ghApiHeaders.Authorization = 'Basic ' + Buffer.from(process.env.GITHUB_TOKEN).toString('base64');
++	const token = process.env.GITHUB_TOKEN;
++	if (token.includes(':')) {
++		ghApiHeaders.Authorization = 'Basic ' + Buffer.from(token).toString('base64');
++	} else if (token.startsWith('bearer ') || token.startsWith('token ')) {
++		ghApiHeaders.Authorization = token;
++	} else {
++		ghApiHeaders.Authorization = 'token ' + token;
++	}
+ }
