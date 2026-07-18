@@ -17,14 +17,17 @@ jobs:
     permissions:
       actions: write
     steps:
+      - uses: actions/checkout@v4
+
       - name: Trigger release on all platforms
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           QUALITY: ${{ github.event.inputs.quality }}
           REF_NAME: ${{ github.ref_name }}
+          REPO: ${{ github.repository }}
         run: |
           for platform in linux macos windows; do
             workflow="publish-${QUALITY}-${platform}.yml"
-            echo "Triggering $workflow on ref $REF_NAME..."
-            gh workflow run "$workflow" --ref "$REF_NAME"
+            echo "Triggering $workflow on ref $REF_NAME in $REPO..."
+            gh workflow run "$workflow" --ref "$REF_NAME" -R "$REPO"
           done
