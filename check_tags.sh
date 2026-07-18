@@ -60,8 +60,11 @@ else
     else
       ASSETS="null"
     fi
+  elif [[ "${LATEST_VERSION}" == "null" ]] || [[ -z "${LATEST_VERSION}" ]]; then
+    echo "No existing release found, creating initial release"
+    ASSETS="null"
   else
-    echo "can't check assets"
+    echo "can't check assets: ${GITHUB_RESPONSE}"
     exit 1
   fi
 fi
