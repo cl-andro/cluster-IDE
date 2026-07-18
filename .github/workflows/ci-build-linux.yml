@@ -6,6 +6,7 @@ on:
       generate_assets:
         type: boolean
         description: Generate assets
+        default: true
       checkout_pr:
         type: string
         description: Checkout PR
@@ -21,7 +22,8 @@ env:
   OS_NAME: linux
   VSCODE_QUALITY: ${{ (github.ref == 'refs/heads/insider' || (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'insider')) && 'insider' || 'stable' }}
 
-permissions: {}
+permissions:
+  contents: write
 
 jobs:
   compile:
@@ -194,6 +196,12 @@ jobs:
         run: ./prepare_assets.sh
         if: env.DISABLED != 'yes' && github.event.inputs.generate_assets == 'true'
 
+      - name: Release assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./release.sh
+        if: env.DISABLED != 'yes' && github.event.inputs.generate_assets == 'true'
+
       - name: Upload assets
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -289,6 +297,12 @@ jobs:
         run: ./build/linux/package_reh.sh
         if: env.DISABLED != 'yes' && (env.SHOULD_BUILD_REH != 'no' || env.SHOULD_BUILD_REH_WEB != 'no' || github.event.inputs.generate_assets == 'true')
 
+      - name: Release assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./release.sh
+        if: env.DISABLED != 'yes' && github.event.inputs.generate_assets == 'true'
+
       - name: Upload assets
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -360,6 +374,12 @@ jobs:
           npm_config_arch: ${{ matrix.npm_arch }}
         run: ./build/alpine/package_reh.sh
         if: env.DISABLED != 'yes' && (env.SHOULD_BUILD_REH != 'no' || env.SHOULD_BUILD_REH_WEB != 'no' || github.event.inputs.generate_assets == 'true')
+
+      - name: Release assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./release.sh
+        if: env.DISABLED != 'yes' && github.event.inputs.generate_assets == 'true'
 
       - name: Upload assets
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
