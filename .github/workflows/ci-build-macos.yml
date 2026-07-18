@@ -70,13 +70,13 @@ jobs:
 
       - name: Prepare assets
         run: ./prepare_assets.sh
-        if: env.SHOULD_BUILD == 'yes' && github.event.inputs.generate_assets == 'true'
+        if: env.SHOULD_BUILD == 'yes' && github.event.inputs.generate_assets != 'false'
 
       - name: Release assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./release.sh
-        if: env.SHOULD_BUILD == 'yes' && github.event.inputs.generate_assets == 'true'
+        if: env.SHOULD_BUILD == 'yes' && github.event.inputs.generate_assets != 'false'
 
       - name: Upload assets
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -84,4 +84,4 @@ jobs:
           name: bin-${{ matrix.vscode_arch }}
           path: assets/
           retention-days: 3
-        if: env.SHOULD_BUILD == 'yes' && github.event.inputs.generate_assets == 'true'
+        if: env.SHOULD_BUILD == 'yes' && github.event.inputs.generate_assets != 'false'
