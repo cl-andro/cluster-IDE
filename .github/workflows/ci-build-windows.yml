@@ -13,6 +13,7 @@ on:
 
 env:
   APP_NAME: clusterIDE
+  ASSETS_REPOSITORY: ${{ (github.ref == 'refs/heads/insider' || (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'insider')) && format('{0}-insiders', github.repository) || github.repository }}
   BINARY_NAME: ${{ (github.ref == 'refs/heads/insider' || (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'insider')) && 'cluster-insiders' || 'cluster' }}
   GH_REPO_PATH: ${{ github.repository }}
   GITHUB_BRANCH: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event.head }}
