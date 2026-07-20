@@ -1,0 +1,18 @@
+--- a/build/linux/debian/install-sysroot.ts
++++ b/build/linux/debian/install-sysroot.ts
+@@ -204,7 +204,14 @@
+ 		throw new Error('Cannot retrieve sysroots.json. Stderr:\n' + result.stderr);
+ 	}
+ 	const sysrootInfo = JSON.parse(fs.readFileSync(sysrootDictLocation, 'utf8'));
+-	const sysrootArch = `bullseye_${arch}`;
++	let sysrootArchSuffix = arch;
++	if (sysrootArchSuffix === 'ppc64le') {
++		sysrootArchSuffix = 'ppc64el';
++	}
++	const sysrootArch = Object.keys(sysrootInfo).find(key => key.endsWith(`_${sysrootArchSuffix}`));
++	if (!sysrootArch) {
++		throw new Error(`No chromium sysroot found for architecture ${arch} in sysroots.json`);
++	}
+ 	const sysrootDict: SysrootDictEntry = sysrootInfo[sysrootArch];
+ 	const tarballFilename = sysrootDict['Tarball'];
+ 	const tarballSha = sysrootDict['Sha256Sum'];
