@@ -45,9 +45,9 @@ if [[ "${VSCODE_ARCH}" == "ia32" ]]; then
 else
    export PLATFORM="${VSCODE_ARCH}"
 fi
-sed -i "s|@@PRODUCT_UPGRADE_CODE@@|${PRODUCT_UPGRADE_CODE}|g" .\\includes\\cluster-variables.wxi
+sed -i "s|@@PRODUCT_UPGRADE_CODE@@|${PRODUCT_UPGRADE_CODE}|g" ./includes/cluster-variables.wxi
 
-sed -i "s|@@PRODUCT_NAME@@|${PRODUCT_NAME}|g" .\\cluster.xsl
+sed -i "s|@@PRODUCT_NAME@@|${PRODUCT_NAME}|g" ./cluster.xsl
 
 find i18n -name '*.wxl' -print0 | xargs -0 sed -i "s|@@PRODUCT_NAME@@|${PRODUCT_NAME}|g"
 
