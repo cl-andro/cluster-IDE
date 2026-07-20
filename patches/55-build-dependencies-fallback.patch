@@ -1,0 +1,21 @@
+--- a/build/linux/dependencies-generator.ts
++++ b/build/linux/dependencies-generator.ts
+@@ -67,9 +67,15 @@
+ 	// Generate the dependencies.
+ 	let dependencies: Set<string>[];
+ 	if (packageType === 'deb') {
+-		const chromiumSysroot = await getChromiumSysroot(arch as DebianArchString);
+-		const vscodeSysroot = await getVSCodeSysroot(arch as DebianArchString);
+-		dependencies = generatePackageDepsDebian(files, arch as DebianArchString, chromiumSysroot, vscodeSysroot);
++		try {
++			const chromiumSysroot = await getChromiumSysroot(arch as DebianArchString);
++			const vscodeSysroot = await getVSCodeSysroot(arch as DebianArchString);
++			dependencies = generatePackageDepsDebian(files, arch as DebianArchString, chromiumSysroot, vscodeSysroot);
++		} catch (err) {
++			console.warn(`Failed to calculate dependencies dynamically: ${err}`);
++			console.warn(`Falling back to reference dependencies list for ${arch}.`);
++			return debianGeneratedDeps[arch as DebianArchString] || [];
++		}
+ 	} else {
+ 		dependencies = generatePackageDepsRpm(files);
+ 	}

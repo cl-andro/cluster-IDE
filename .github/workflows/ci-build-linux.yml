@@ -196,7 +196,9 @@ jobs:
           VSCODE_SYSROOT_REPOSITORY: ${{ steps.build.outputs.VSCODE_SYSROOT_REPOSITORY }}
           VSCODE_SYSROOT_VERSION: ${{ steps.build.outputs.VSCODE_SYSROOT_VERSION }}
           VSCODE_SYSROOT_PREFIX: ${{ steps.build.outputs.VSCODE_SYSROOT_PREFIX }}
-        run: ./prepare_assets.sh
+        run: |
+          sudo chown -R $USER:$USER .
+          ./prepare_assets.sh
         if: env.DISABLED != 'yes' && github.event.inputs.generate_assets != 'false'
 
       - name: Release assets
