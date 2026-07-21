@@ -89,6 +89,19 @@ else
       export PKG_CONFIG_ALLOW_CROSS=1
     fi
 
+  elif [[ "${VSCODE_ARCH}" == "riscv64" ]]; then
+    VSCODE_CLI_TARGET="riscv64gc-unknown-linux-gnu"
+
+    # Use system libs but isolate them to avoid conflicts with the sysroot compiler
+    mkdir -p openssl/out/riscv64-linux/lib
+    mkdir -p openssl/out/riscv64-linux/include
+    cp -R /usr/include/openssl openssl/out/riscv64-linux/include/
+    if [[ -d "/usr/include/riscv64-linux-gnu/openssl" ]]; then
+      cp -RL /usr/include/riscv64-linux-gnu/openssl/* openssl/out/riscv64-linux/include/openssl/
+    fi
+    ln -sf /usr/lib/riscv64-linux-gnu/libssl.so* openssl/out/riscv64-linux/lib/
+    ln -sf /usr/lib/riscv64-linux-gnu/libcrypto.so* openssl/out/riscv64-linux/lib/
+
   elif [[ "${VSCODE_ARCH}" == "x64" ]]; then
     VSCODE_CLI_TARGET="x86_64-unknown-linux-gnu"
   fi
