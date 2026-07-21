@@ -227,6 +227,7 @@ jobs:
           VSCODE_SYSROOT_VERSION: ${{ steps.build.outputs.VSCODE_SYSROOT_VERSION }}
           VSCODE_SYSROOT_PREFIX: ${{ steps.build.outputs.VSCODE_SYSROOT_PREFIX }}
         run: |
+          sudo apt-get update && sudo apt-get install -y imagemagick
           sudo chown -R $USER:$USER .
           ./prepare_assets.sh
         if: env.DISABLED != 'yes' && env.SHOULD_BUILD == 'yes'

@@ -19,3 +19,15 @@
  	} else {
  		dependencies = generatePackageDepsRpm(files);
  	}
+@@ -82,9 +88,9 @@
+ 		return !bundledDeps.some(bundledDep => dependency.startsWith(bundledDep));
+ 	}).sort();
+ 
+-	const referenceGeneratedDeps = packageType === 'deb' ?
++	const referenceGeneratedDeps = (packageType === 'deb' ?
+ 		debianGeneratedDeps[arch as DebianArchString] :
+-		rpmGeneratedDeps[arch as RpmArchString];
++		rpmGeneratedDeps[arch as RpmArchString]) || [];
+ 	if (JSON.stringify(sortedDependencies) !== JSON.stringify(referenceGeneratedDeps)) {
+ 		const failMessage = 'The dependencies list has changed.'
+ 			+ '\nOld:\n' + referenceGeneratedDeps.join('\n')
