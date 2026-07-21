@@ -1,0 +1,11 @@
+--- a/cli/src/util/prereqs.rs
++++ b/cli/src/util/prereqs.rs
+@@ -210,7 +210,7 @@
+ async fn check_glibcxx_version() -> Result<bool, String> {
+ 	let mut libstdc_path: Option<String> = None;
+ 
+-	#[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
++	#[cfg(any(target_arch = "x86_64", target_arch = "aarch64", target_arch = "riscv64"))]
+ 	const DEFAULT_LIB_PATH: &str = "/usr/lib64/libstdc++.so.6";
+ 	#[cfg(target_arch = "powerpc64")]
+ 	const DEFAULT_LIB_PATH: &str = "/usr/lib64/libstdc++.so.6";

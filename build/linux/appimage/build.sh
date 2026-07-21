@@ -21,6 +21,9 @@ if [[ "${VSCODE_ARCH}" == "x64" ]]; then
 
   ./pkg2appimage.AppImage --appimage-extract && mv ./squashfs-root ./pkg2appimage.AppDir
 
+  # fix glib-compile-schemas symbol lookup error by unsetting LD_LIBRARY_PATH
+  find pkg2appimage.AppDir/ -type f -exec sed -i 's/glib-compile-schemas \./LD_LIBRARY_PATH="" glib-compile-schemas \./g' {} + 2>/dev/null || true
+
   # add update's url
   if [[ "${VSCODE_QUALITY}" == "insider" ]]; then
     sed -i 's/generate_type2_appimage/generate_type2_appimage -u "gh-releases-zsync|ClusterFamily|cluster-insiders|latest|*.AppImage.zsync"/' pkg2appimage.AppDir/AppRun
