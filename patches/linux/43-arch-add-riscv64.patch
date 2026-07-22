@@ -161,7 +161,7 @@ index ec97760..de9ca72 100644
 +			Platform::LinuxRISCV64 => "LinuxRISCV64",
  			Platform::DarwinX64 => "DarwinX64",
 diff --git a/cli/src/util/prereqs.rs b/cli/src/util/prereqs.rs
-index 679aacb..1a37552 100644
+index 679aacb..42848c4 100644
 --- a/cli/src/util/prereqs.rs
 +++ b/cli/src/util/prereqs.rs
 @@ -84,2 +84,4 @@ impl PreReqChecker {
@@ -169,6 +169,11 @@ index 679aacb..1a37552 100644
 +				} else if cfg!(target_arch = "riscv64") {
 +					Platform::LinuxRISCV64
  				} else {
+@@ -212,2 +214,4 @@ async fn check_glibcxx_version() -> Result<bool, String> {
+ 	const DEFAULT_LIB_PATH: &str = "/usr/lib64/libstdc++.so.6";
++	#[cfg(target_arch = "riscv64")]
++	const DEFAULT_LIB_PATH: &str = "/usr/lib64/libstdc++.so.6";
+ 	#[cfg(any(target_arch = "x86", target_arch = "arm"))]
 diff --git a/resources/server/bin/helpers/check-requirements-linux.sh b/resources/server/bin/helpers/check-requirements-linux.sh
 index 94028e3..c41cce7 100644
 --- a/resources/server/bin/helpers/check-requirements-linux.sh
