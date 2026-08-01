@@ -19,11 +19,30 @@ cd vscode || { echo "'vscode' dir not found"; exit 1; }
 export VSCODE_PLATFORM='alpine'
 export VSCODE_SKIP_NODE_VERSION_CHECK=1
 
+if [[ -z "${REPOSITORY_OWNER}" ]]; then
+  REPOSITORY_OWNER="cl-andro"
+fi
+
 VSCODE_HOST_MOUNT="$( pwd )"
-VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/vscodium/vscode-linux-build-agent:alpine-${VSCODE_ARCH}"
+VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/${REPOSITORY_OWNER}/vscodium-linux-build-agent:alpine-${VSCODE_ARCH}"
 export VSCODE_NPMRC_PATH="${VSCODE_HOST_MOUNT}/.npmrc"
 
 export VSCODE_HOST_MOUNT VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME VSCODE_NPMRC_PATH
+
+if [[ -n "${VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME}" ]]; then
+  echo "Pre-pulling build agent container: ${VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME}"
+  if ! sudo docker pull "${VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME}"; then
+    echo "Failed to pull from GHCR. Falling back to Docker Hub..."
+    DOCKER_HUB_IMAGE="${VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME/ghcr.io\/*\//vscodium/}"
+    echo "Pulling from Docker Hub: ${DOCKER_HUB_IMAGE}"
+    if sudo docker pull "${DOCKER_HUB_IMAGE}"; then
+      echo "Successfully pulled from Docker Hub. Retagging to local name..."
+      sudo docker tag "${DOCKER_HUB_IMAGE}" "${VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME}"
+    else
+      echo "Failed to pull from Docker Hub as well. This build may fail if docker doesn't find it locally."
+    fi
+  fi
+fi
 
 if [[ -d "../patches/alpine/reh/" ]]; then
   for file in "../patches/alpine/reh/"*.patch; do

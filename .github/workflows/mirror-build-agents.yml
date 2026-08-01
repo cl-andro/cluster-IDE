@@ -1,0 +1,58 @@
+name: Mirror Build Agent Images
+
+on:
+  workflow_dispatch:
+
+permissions:
+  packages: write
+  contents: read
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to ghcr.io
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Mirror Images
+        run: |
+          IMAGES=(
+            "focal-devtoolset-x64"
+            "focal-devtoolset-arm64"
+            "focal-devtoolset-ppc64le"
+            "focal-devtoolset-riscv64"
+            "focal-devtoolset-s390x"
+            "beige-devtoolset-loong64"
+            "alpine-x64"
+            "alpine-arm64"
+          )
+          for tag in "${IMAGES[@]}"; do
+            echo "::group::Mirroring tag: ${tag}"
+            
+            # Pull from Docker Hub with retries
+            for i in {1..3}; do
+              if docker pull "vscodium/vscodium-linux-build-agent:${tag}"; then
+                break
+              fi
+              echo "Pull failed, retrying in 10s... ($i/3)"
+              sleep 10
+            done
+
+            # Retag to GHCR target
+            docker tag "vscodium/vscodium-linux-build-agent:${tag}" "ghcr.io/${{ github.repository_owner }}/vscodium-linux-build-agent:${tag}"
+            
+            # Push to GHCR with retries
+            for i in {1..3}; do
+              if docker push "ghcr.io/${{ github.repository_owner }}/vscodium-linux-build-agent:${tag}"; then
+                break
+              fi
+              echo "Push failed, retrying in 10s... ($i/3)"
+              sleep 10
+            done
+            
+            echo "::endgroup::"
+          done

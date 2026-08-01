@@ -23,23 +23,27 @@ NODE_VERSION="24.15.0"
 export VSCODE_NODEJS_URLROOT='/download/release'
 export VSCODE_NODEJS_URLSUFFIX=''
 
+if [[ -z "${REPOSITORY_OWNER}" ]]; then
+  REPOSITORY_OWNER="cl-andro"
+fi
+
 if [[ "${VSCODE_ARCH}" == "x64" ]]; then
-  VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/vscodium/vscode-linux-build-agent:focal-devtoolset-x64"
+  VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/${REPOSITORY_OWNER}/vscodium-linux-build-agent:focal-devtoolset-x64"
 
   export VSCODE_SKIP_SETUPENV=1
 elif [[ "${VSCODE_ARCH}" == "arm64" ]]; then
   EXPECTED_GLIBC_VERSION="2.30"
 
-  VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/vscodium/vscode-linux-build-agent:focal-devtoolset-arm64"
+  VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/${REPOSITORY_OWNER}/vscodium-linux-build-agent:focal-devtoolset-arm64"
 
   export VSCODE_SKIP_SYSROOT=1
   export USE_GNUPP2A=1
 elif [[ "${VSCODE_ARCH}" == "ppc64le" ]]; then
-  VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/vscodium/vscode-linux-build-agent:focal-devtoolset-ppc64le"
+  VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/${REPOSITORY_OWNER}/vscodium-linux-build-agent:focal-devtoolset-ppc64le"
   export VSCODE_SYSROOT_REPOSITORY='VSCodium/vscode-linux-build-agent'
   export VSCODE_SYSROOT_VERSION='20260706'
 elif [[ "${VSCODE_ARCH}" == "riscv64" ]]; then
-  VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/vscodium/vscode-linux-build-agent:focal-devtoolset-riscv64"
+  VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/${REPOSITORY_OWNER}/vscodium-linux-build-agent:focal-devtoolset-riscv64"
 
   export VSCODE_SKIP_SETUPENV=1
   export VSCODE_NODEJS_SITE='https://unofficial-builds.nodejs.org'
@@ -74,14 +78,14 @@ elif [[ "${VSCODE_ARCH}" == "riscv64" ]]; then
   fs.writeFileSync('./remote/package-lock.json', JSON.stringify(lock, null, 2) + '\n');
   "
 elif [[ "${VSCODE_ARCH}" == "loong64" ]]; then
-  VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/vscodium/vscode-linux-build-agent:beige-devtoolset-loong64"
+  VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/${REPOSITORY_OWNER}/vscodium-linux-build-agent:beige-devtoolset-loong64"
 
   export VSCODE_SKIP_SETUPENV=1
   export VSCODE_NODEJS_SITE='https://unofficial-builds.nodejs.org'
 elif [[ "${VSCODE_ARCH}" == "s390x" ]]; then
   GLIBC_VERSION="2.28"
 
-  VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/vscodium/vscode-linux-build-agent:focal-devtoolset-s390x"
+  VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME="ghcr.io/${REPOSITORY_OWNER}/vscodium-linux-build-agent:focal-devtoolset-s390x"
   VSCODE_SYSROOT_PREFIX="-glibc-${GLIBC_VERSION}"
 
   export VSCODE_SYSROOT_REPOSITORY='VSCodium/vscode-linux-build-agent'
@@ -106,6 +110,21 @@ export VSCODE_NPMRC_PATH="${VSCODE_HOST_MOUNT}/.npmrc"
 export VSCODE_HOST_MOUNT
 export VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME
 export VSCODE_NPMRC_PATH
+
+if [[ -n "${VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME}" ]]; then
+  echo "Pre-pulling build agent container: ${VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME}"
+  if ! sudo docker pull "${VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME}"; then
+    echo "Failed to pull from GHCR. Falling back to Docker Hub..."
+    DOCKER_HUB_IMAGE="${VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME/ghcr.io\/*\//vscodium/}"
+    echo "Pulling from Docker Hub: ${DOCKER_HUB_IMAGE}"
+    if sudo docker pull "${DOCKER_HUB_IMAGE}"; then
+      echo "Successfully pulled from Docker Hub. Retagging to local name..."
+      sudo docker tag "${DOCKER_HUB_IMAGE}" "${VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME}"
+    else
+      echo "Failed to pull from Docker Hub as well. This build may fail if docker doesn't find it locally."
+    fi
+  fi
+fi
 
 sed -i "/target/s/\"22.*\"/\"${NODE_VERSION}\"/" remote/.npmrc
 
