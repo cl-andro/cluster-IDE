@@ -61,7 +61,21 @@ fi
 
 if [[ "${SHOULD_BUILD_APPIMAGE}" != "no" ]]; then
   echo "Moving AppImage"
-  mv build/linux/appimage/out/*.AppImage* assets/
 
-  find assets -name '*.AppImage*' -exec bash -c 'mv $0 ${0/_-_/-}' {} \;
+  if [[ "${VSCODE_QUALITY}" == "insider" ]]; then
+    APP_NAME_QUALITY="${APP_NAME}-Insiders"
+  else
+    APP_NAME_QUALITY="${APP_NAME}"
+  fi
+
+  for f in build/linux/appimage/out/*.AppImage*; do
+    if [[ -f "$f" ]]; then
+      ext="${f##*.}"
+      if [[ "$ext" == "zsync" ]]; then
+        mv "$f" "assets/${APP_NAME_QUALITY}-${RELEASE_VERSION}-x86_64.AppImage.zsync"
+      else
+        mv "$f" "assets/${APP_NAME_QUALITY}-${RELEASE_VERSION}-x86_64.AppImage"
+      fi
+    fi
+  done
 fi
